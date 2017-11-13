@@ -1,0 +1,4 @@
+rootProject.name = 'MemoizedKotlin'
+include 'processor'
+include 'annotation'
+
