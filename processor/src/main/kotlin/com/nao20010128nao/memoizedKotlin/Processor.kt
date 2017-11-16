@@ -24,7 +24,6 @@ class Processor : AbstractProcessor() {
                     val paramsLen = it.parameters.size
                     val annotation = it.getAnnotation(KotlinMemoized::class.java)
                     val willBe = convertNameToMemoizedName(it.simpleName.toString(), annotation.value)
-                    val (kMdf, kAnnots) = jvmModifiers(it.modifiers)
                     if (Modifier.STATIC in it.modifiers) {
                         /*
                          * method is static
@@ -85,7 +84,6 @@ class Processor : AbstractProcessor() {
                                     FunSpec.builder(willBe)
                                             .returns(retType)
                                             .apply { jvmModifiers(it.modifiers) }
-                                            .apply { kAnnots.forEach { addAnnotation(it) } }
                                             .addAnnotations(it.annotationMirrors.map { AnnotationSpec.Companion.get(it) })
                                             .addCode("return ${willBe}Cache.getOrPut(this to ${tuple.canonicalName}($params)) { this.${it.simpleName}($params) }")
                                             .addParameters(it.parameters.map { ParameterSpec.get(it) })
